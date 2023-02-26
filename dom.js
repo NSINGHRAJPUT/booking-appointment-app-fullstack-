@@ -5,9 +5,15 @@ let btn=document.querySelector('.btn');
       var full_name=document.getElementById('name').value;
         var email_id=document.getElementById('email').value;
       //   console.log(full_name)
-      localStorage.setItem('full name', full_name);
-      localStorage.setItem('emailid', email_id);
-      // console.log(localStorage.getItem('emailid'))
+      var myobj={
+         name:`${full_name}`,
+         email_id: `${email_id}`
+      }
+      var myobj_serialized=JSON.stringify(myobj)
+      localStorage.setItem('user details', myobj_serialized);
+      var myobj_deserialized=JSON.parse(localStorage.getItem('user details'))
+      console.log(myobj_deserialized)
+   
    })
     
    
