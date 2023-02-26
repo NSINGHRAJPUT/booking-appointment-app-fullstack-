@@ -1,81 +1,75 @@
-// var items = document.getElementsByClassName('list-group-item');
-//  items[2].style.backgroundColor='green';
-//  for(let i=0;i<items.length;i++){
-//     items[i].style.fontWeight='bold';
-//     items[i].style.color='purple'
-//  }
-// var itemx=document.getElementsByClassName('item');
-// console.log(itemx)
-// itemx[0].style.color='yellow';
+var form = document.getElementById('addForm');
+var itemList = document.getElementById('items');
+var filter = document.getElementById('filter');
 
+// Form submit event
+form.addEventListener('submit', addItem);
+// Delete event
+itemList.addEventListener('click', removeItem);
+// Filter event
+filter.addEventListener('keyup', filterItems);
 
+// Add item
+function addItem(e){
+  e.preventDefault();
 
-// var item=document.getElementsByTagName('li');
-// console.log(item[4])
-// item[4].style.backgroundColor='red'
+  // Get input value
+  var newItem = document.getElementById('item').value;
 
-//  var item =document.querySelectorAll('li:nth-child()');
-//  item[0].style.color='green'
+  // Create new li element
+  var li = document.createElement('li');
+  // Add class
+  li.className = 'list-group-item';
+  // Add text node with input value
+  li.appendChild(document.createTextNode(newItem));
 
-//  var odd=document.querySelectorAll('li:nth-child(odd)');
-//  for(let i=0;i<odd.length;i++){
-//     odd[i].style.backgroundColor='green'
-//  }
+  // Create del button element
+  var deleteBtn = document.createElement('button');
 
-//1.parentelement
-var itemList =document.querySelector('#items');
-itemList.parentElement.style.backgroundColor='darkgray';
+  // Create edit button element
+  var editBtn = document.createElement('button');
 
-//2.last element child
-itemList.lastElementChild.style.color='red';
+  // Add classes to del button
+  deleteBtn.className = 'btn btn-danger btn-sm float-right delete';
 
-//3.lastchild
-itemList.lastChild.style.fontWeight='bold';
+  //add classes to edit button 
+  editBtn.className ='btn btn-warning btn-sm float-right edit'
 
-//4.createchild
-const node = document.createElement("li");
-const textnode = document.createTextNode("item 999");
-node.appendChild(textnode);
-document.getElementById("items").appendChild(node);
+  // Append text node
+  deleteBtn.appendChild(document.createTextNode('X'));
+  editBtn.appendChild(document.createTextNode('i'));
 
-//5.firstelement child
-itemList.firstElementChild.style.color='purple';
+  // Append button to li
+  li.appendChild(deleteBtn);
+  li.appendChild(editBtn)
 
-//6.firstchild
-itemList.firstChild.style.backgroundColor='gray';
+  // Append li to list
+  itemList.appendChild(li);
+}
 
+// Remove item
+function removeItem(e){
+  if(e.target.classList.contains('delete')){
+    if(confirm('Are You Sure?')){
+      var li = e.target.parentElement;
+      itemList.removeChild(li);
+    }
+  }
+}
 
-//7.next sibling
-itemList.nextSibling.style.fontWeight='bold';
-
-//8.nextelement sibling
-itemList.nextElementSibling.style.color='blue';
-
-//9. previous sibling
-itemList.previousSibling.style.backgroundColor='pink';
-
-//10. previous element sibling
-itemList.previousElementSibling.style.border='2px solid blue';
-
-//11. create element
-var newDiv = document.createElement('div');
-newDiv.className='hello';
-newDiv.id='hello1';
-
-//12. setAttribute
-newDiv.setAttribute('title', 'hello div')
-
-//13. create text node
-var newDivText = document.createTextNode('hello world');
-
-//14.append child
-newDiv.appendChild(newDivText);
-
-
-var container = document.querySelector('header .container');
-var h1=document.querySelector('header h1');
-var updateItem=document.querySelector('div .list-group');
-var li=document.querySelector('div li')
-container.insertBefore(newDiv,h1)
-updateItem.insertBefore(newDiv,li)
-
+// Filter Items
+function filterItems(e){
+  // convert text to lowercase
+  var text = e.target.value.toLowerCase();
+  // Get lis
+  var items = itemList.getElementsByTagName('li');
+  // Convert to an array
+  Array.from(items).forEach(function(item){
+    var itemName = item.firstChild.textContent;
+    if(itemName.toLowerCase().indexOf(text) != -1){
+      item.style.display = 'block';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
