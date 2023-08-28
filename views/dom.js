@@ -15,7 +15,7 @@ window.addEventListener('load', () => {
   })
     .catch((err) => console.log(err))
 })
-
+////////////// for creating dom element
 function createElement(name, number, email) {
   var li = document.createElement('li');
   li.className = 'list-group-item';
@@ -37,7 +37,7 @@ function createElement(name, number, email) {
 }
 
 
-// Add item
+// Add item to the list
 function addItem(e) {
   e.preventDefault();
   var name = document.getElementById('name').value;
@@ -56,7 +56,8 @@ function addItem(e) {
   document.getElementById('number').value = '';
   document.getElementById('email').value = '';
 }
-//Remove item
+
+//Remove item from the list
 function removeItem(e) {
   if (e.target.classList.contains('delete')) {
     if (confirm('Are You Sure?')) {
@@ -69,21 +70,22 @@ function removeItem(e) {
     }
   }
 }
-//edit item
+
+//edit item in the list
 function editItem(e) {
   if (e.target.classList.contains('edit')) {
     let x = e.target.parentElement.textContent
     var num = `${x}`.match(/\d+/g);
     const response = axios.post("http://localhost:3000/booking/edit-user/", { Number: num[0] })
     response.then((res) => {
-      console.log(res.data)
       document.getElementById('name').value = res.data.Name;
       document.getElementById('number').value = res.data.Number;
       document.getElementById('email').value = res.data.Email;
       localStorage.removeItem(num[0]);
       var li = e.target.parentElement;
+      itemList.removeChild(li)
       const response = axios.post('http://localhost:3000/booking/delete-user/', { Number: num[0] })
-      response.then((res) => itemList.removeChild(li)).catch(err => console.log(err))
+      response.then((res) => console.log(res)).catch(err => console.log(err))
     }).catch(err => console.log(err))
 
   }
